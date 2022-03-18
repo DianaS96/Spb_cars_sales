@@ -3,12 +3,14 @@
 ## What I did
 1) First, I scraped data on cars from the website https://rolf-probeg.ru/spb/cars/ (pls, see auto_data.py file).
 2) Second, I performed data cleaning, EDA and converted categorical data to numerical data (pls, see auto_rolf.ipynb file).
-3) The next step was model selection. Initially I used LinearRegression, but it gave unsatisfactory result. So I tried RandomForestRegressor tuning with RandomizedSearchCV. (pls, see auto_rolf.ipynb file)
-4) The final step was creating GUI with HTML and CSS.
+3) The next step was model selection. Initially I used LinearRegression, but it gave unsatisfactory result. So I tried RandomForestRegressor tuning with RandomizedSearchCV,  GradientBoostingRegressor, LightGBM, CatBoostRegressor, XGboost. <br>
+I chose LightGBM as this model is the fastest one and has pretty high accuracy. (pls, see auto_rolf.ipynb file)
+5) The final step was creating GUI with HTML and CSS.
 ### You can see example in video below.
-https://user-images.githubusercontent.com/81222865/158872187-0c6cb9fa-76ca-4df6-ab64-8b73e6be7fc8.mp4
+https://user-images.githubusercontent.com/81222865/159007870-9039915b-e20c-4457-8836-82bd047a4723.mp4
 
 ## Usage
+
 * Clone this repo.
 * Install the required packages (see requirements.txt).
 * Run **`flask run`** or **`app.py`**.
