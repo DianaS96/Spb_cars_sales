@@ -3,8 +3,9 @@ from flask import Flask, request, render_template
 import pickle
 from flask_cors import cross_origin
 import sklearn
+import joblib
 
-model = pickle.load(open('car_spb.pkl', 'rb'))
+model = joblib.load('lgb.pkl')
 app = Flask(__name__)
 
 @app.route('/')
