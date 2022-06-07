@@ -16,4 +16,4 @@ https://user-images.githubusercontent.com/81222865/159007870-9039915b-e20c-4457-
 * Run **`flask run`** or **`app.py`**.
 
 *Prediction of estimated car price is made based on sample data collected before 24/02/2022.<br/>
-Shameful and unjustified russian invasion of Ukraine (24/02/2022) led to supply reduction and increase in production cost, which resulted in car prices increase.*
+The events of 24/02/2022 led to supply reduction and increase in production cost, which resulted in car prices increase.*
