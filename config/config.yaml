@@ -3,7 +3,7 @@ database:
   TXT_FILE: auto_urls_list.txt
   CSV_FILE: auto_data.csv
   DB_NAME: test.db
-  create_db: True
+  create_db: False
   update_csv: False
   update_auto_urls: False
 
