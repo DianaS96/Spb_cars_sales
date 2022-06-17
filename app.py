@@ -1,184 +1,120 @@
+import os
 import pandas as pd
-from flask import Flask, request, render_template
-import pickle
+import sqlite3
+from flask import Flask, render_template
 from flask_cors import cross_origin
-import sklearn
 import joblib
+import yaml
 
-model = joblib.load('lgb.pkl')
+import train
+from forms import SelectAutoCharacteristics
+
+config = yaml.safe_load(open("C:/Users/User/Desktop/Programming/Spb_cars_sales/config/config.yaml"))
+model_name = config['train']['model_name']
+config_db = config['database']
+
+auto_brand_enc = dir()
+auto_carcase_enc = dir()
+auto_transmission_enc = dir()
+auto_drive_unit_enc = dir()
+
+
+def get_encoded_values():
+    try:
+        global auto_brand_enc
+        global auto_carcase_enc
+        global auto_transmission_enc
+        global auto_drive_unit_enc
+
+        conn = sqlite3.connect(config_db['DIR'] + config_db['DB_NAME'])
+        data = pd.read_sql_query('SELECT * FROM cars', conn)
+        data_brands = pd.DataFrame(data, columns=['brand', 'auto_brand_enc']).drop_duplicates().reset_index()
+        data_carcase = pd.DataFrame(data, columns=['auto_carcase', 'auto_carcase_enc']).drop_duplicates().reset_index()
+        data_transmission = pd.DataFrame(data, columns=['auto_transmission', 'auto_transmission_enc']).drop_duplicates().reset_index()
+        data_drive_unit = pd.DataFrame(data, columns=['auto_drive_unit', 'auto_drive_unit_enc']).drop_duplicates().reset_index()
+
+        auto_brand_enc = dict(zip(data_brands.brand, data_brands.auto_brand_enc))
+        auto_carcase_enc = dict(zip(data_carcase.auto_carcase, data_carcase.auto_carcase_enc))
+        auto_transmission_enc = dict(zip(data_transmission.auto_transmission, data_transmission.auto_transmission_enc))
+        auto_drive_unit_enc = dict(zip(data_drive_unit.auto_drive_unit, data_drive_unit.auto_drive_unit_enc))
+
+        conn.close()
+
+    except Exception as e:
+        print(e)
+        return 1
+    return 0
+
+
+try:
+    model = joblib.load(model_name)
+except Exception as e:
+    print(e)
+    print("Creating new model...")
+    test.get_prediction_model()
+
 app = Flask(__name__)
+
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+
 
 @app.route('/')
 @cross_origin()
 def home():
-    return render_template('index.html')
+    form = SelectAutoCharacteristics()
+    form.brand.choices = sorted(list(auto_brand_enc.keys()))
+    form.carcase.choices = sorted(list(auto_carcase_enc.keys()))
+    form.transmission.choices = sorted(list(auto_transmission_enc.keys()))
+    form.drive_unit.choices = sorted(list(auto_drive_unit_enc.keys()))
+    return render_template('index.html', form=form)
+
 
 @app.route('/result', methods=['GET', 'POST'])
 @cross_origin()
 def result():
-    if request.method =='POST':
-        auto_carcase = request.form['Carcase']
-        carcase = 0
-        if (auto_carcase == 'SUV'):
-            carcase = 1
-        elif (auto_carcase == 'Sedan'):
-            carcase = 2
-        elif (auto_carcase == 'Hatchback'):
-            carcase = 3
-        elif (auto_carcase == 'Liftback'):
-            carcase = 4
-        elif (auto_carcase == 'Station_wagon'):
-            carcase = 5
-        elif (auto_carcase == 'Station_wagon'):
-            carcase = 6
-
-        auto_year = request.form['year']
-
-        Capacity = request.form['Capacity']
-
-        auto_drive_unit = request.form['auto_drive_unit']
-        drive_unit = 0
-        if (auto_drive_unit == 'four-wheel-drive'):
-            drive_unit = 0
-        elif (auto_drive_unit == 'front-wheel-drive'):
-            drive_unit = 1
-        elif (auto_drive_unit == 'Rear-wheel-drive'):
-            drive_unit = 2
-
-        auto_transmission = request.form['Transmission']
-        transmission = 4
-        if (auto_transmission == 'Automatic'):
-            transmission = 1
-        if (auto_transmission == 'Manual'):
-            transmission = 2
-        if (auto_transmission == 'Robotic'):
-            transmission = 3
-
-        guarantee_year = request.form['guarantee']
-
-        brand = request.form['Brand']
-        auto_brand = 0
-        if (brand == 'alfa-romeo'):
-            auto_brand = 0
-        elif (brand == 'audi'):
-            auto_brand = 1
-        elif (brand == 'bentley'):
-            auto_brand = 2
-        elif (brand == 'bmw'):
-            auto_brand = 3
-        elif (brand == 'cadillac'):
-            auto_brand = 4
-        elif (brand == 'chery'):
-            auto_brand = 5
-        elif (brand == 'chevrolet'):
-            auto_brand = 6
-        elif (brand == 'chrysler'):
-            auto_brand = 7
-        elif (brand == 'citroen'):
-            auto_brand = 8
-        elif (brand == 'datsun'):
-            auto_brand = 9
-        elif (brand == 'dodge'):
-            auto_brand = 10
-        elif (brand == 'dongfeng'):
-            auto_brand = 11
-        elif (brand == 'fiat'):
-            auto_brand = 12
-        elif (brand == 'ford'):
-            auto_brand = 13
-        elif (brand == 'geely'):
-            auto_brand = 14
-        elif (brand == 'genesis'):
-            auto_brand = 15
-        elif (brand == 'haval'):
-            auto_brand = 16
-        elif (brand == 'honda'):
-            auto_brand = 17
-        elif (brand == 'hyundai'):
-            auto_brand = 18
-        elif (brand == 'infiniti'):
-            auto_brand = 19
-        elif (brand == 'izh'):
-            auto_brand = 20
-        elif (brand == 'jaguar'):
-            auto_brand = 21
-        elif (brand == 'jeep'):
-            auto_brand = 22
-        elif (brand == 'kia'):
-            auto_brand = 23
-        elif (brand == 'lada--vaz-'):
-            auto_brand = 24
-        elif (brand == 'land-rover'):
-            auto_brand = 25
-        elif (brand == 'lexus'):
-            auto_brand = 26
-        elif (brand == 'lifan'):
-            auto_brand = 27
-        elif (brand == 'maserati'):
-            auto_brand = 28
-        elif (brand == 'mazda'):
-            auto_brand = 29
-        elif (brand == 'mercedes'):
-            auto_brand = 30
-        elif (brand == 'mini'):
-            auto_brand = 31
-        elif (brand == 'mitsubishi'):
-            auto_brand = 32
-        elif (brand == 'nissan'):
-            auto_brand = 33
-        elif (brand == 'opel'):
-            auto_brand = 34
-        elif (brand == 'peugeot'):
-            auto_brand = 35
-        elif (brand == 'pontiac'):
-            auto_brand = 36
-        elif (brand == 'porsche'):
-            auto_brand = 37
-        elif (brand == 'renault'):
-            auto_brand = 38
-        elif (brand == 'saab'):
-            auto_brand = 39
-        elif (brand == 'seat'):
-            auto_brand = 40
-        elif (brand == 'skoda'):
-            auto_brand = 41
-        elif (brand == 'ssangyong'):
-            auto_brand = 42
-        elif (brand == 'subaru'):
-            auto_brand = 43
-        elif (brand == 'suzuki'):
-            auto_brand = 44
-        elif (brand == 'toyota'):
-            auto_brand = 45
-        elif (brand == 'uaz'):
-            auto_brand = 46
-        elif (brand == 'volkswagen'):
-            auto_brand = 47
-        elif (brand == 'volvo'):
-            auto_brand = 48
+    form = SelectAutoCharacteristics()
+    form.brand.choices = sorted(list(auto_brand_enc.keys()))
+    form.carcase.choices = sorted(list(auto_carcase_enc.keys()))
+    form.transmission.choices = sorted(list(auto_transmission_enc.keys()))
+    form.drive_unit.choices = sorted(list(auto_drive_unit_enc.keys()))
+    if form.submit.data:
+        auto_year = form.year.data
+        capacity = form.engine_capacity.data
+        guarantee_year = form.guarantee.data
+        carcase = auto_carcase_enc[form.carcase.data]
+        drive_unit = auto_drive_unit_enc[form.drive_unit.data]
+        transmission = auto_transmission_enc[form.transmission.data]
+        auto_brand = auto_brand_enc[form.brand.data]
 
         output = model.predict([[auto_year,
-                                 Capacity,
+                                 capacity,
                                  guarantee_year,
                                  carcase,
-                                 drive_unit,
+                                 auto_brand,
                                  transmission,
-                                 auto_brand]])
+                                 drive_unit]], )
 
         output = output[0]
 
-        str_out = f'Brand: {brand}<br />'\
-                  f'Carcase: {auto_carcase}<br />'\
-                  f'Year of manufacture: {auto_year}<br />'\
-                  f'Engine capacity: {Capacity}<br />'\
-                  f'Drive unit: {auto_drive_unit}<br />'\
-                  f'Transmission: {auto_transmission}<br />'\
-                  f'End of guarantee: {guarantee_year}<br />'\
-                  f'Estimated car price as of 19/02/2022: {output: 10,.2f} RUB'
+        str_out = f'Brand: {form.brand.data}<br />' \
+                  f'Carcase: {form.carcase.data}<br />' \
+                  f'Year of manufacture: {auto_year}<br />' \
+                  f'Engine capacity: {capacity}<br />' \
+                  f'Drive unit: {form.drive_unit.data}<br />' \
+                  f'Transmission: {form.transmission.data}<br />' \
+                  f'End of guarantee: {guarantee_year}<br />' \
+                  f'Estimated car price as of June 2022: {output: 10,.2f} RUB'
 
         return (render_template('index.html',
+                                form=form,
                                 prediction=str_out))
+    return render_template('index.html', form=form)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    if config['app']['get_prediction_model']:
+        print("Creating model...")
+        train.get_prediction_model()
+    if get_encoded_values() == 0:
+        app.run(debug=True)
