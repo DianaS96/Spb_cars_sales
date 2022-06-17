@@ -17,7 +17,7 @@
     <!-- As a link -->
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-        <a class="navbar-brand" href="/" style="color: antiquewhite;">Car price</a>
+        <a class="navbar-brand" href="\" style="color: antiquewhite;">Car price</a>
         </div>
     </nav>
     
@@ -29,62 +29,7 @@
                     <div class="card" style="border-radius: 2.15rem; opacity: 0.7;">
                         <div class="card-body">
                           <h5 class="card-title">Brand</h5>
-                          <select name="Brand" id="Brand" required="required">
-                            <option value="mazda">mazda</option>
-                            <option value="lexus">lexus</option>
-                            <option value="infiniti">infiniti</option>
-                            <option value="nissan">nissan</option>
-                            <option value="hyundai">hyundai</option>
-                            <option value="audi">audi</option>
-                            <option value="kia">kia</option>
-                            <option value="mercedes">mercedes</option>
-                            <option value="ford">ford</option>
-                            <option value="volvo">volvo</option>
-                            <option value="land-rover">land-rover</option>
-                            <option value="bmw">bmw</option>
-                            <option value="skoda">skoda</option>
-                            <option value="genesis">genesis</option>
-                            <option value="volkswagen">volkswagen</option>
-                            <option value="jaguar">jaguar</option>
-                            <option value="toyota">toyota</option>
-                            <option value="peugeot">peugeot</option>
-                            <option value="mitsubishi">mitsubishi</option>
-                            <option value="chery">chery</option>
-                            <option value="honda">honda</option>
-                            <option value="cadillac">cadillac</option>
-                            <option value="subaru">subaru</option>
-                            <option value="lada--vaz-">lada--vaz-</option>
-                            <option value="opel">opel</option>
-                            <option value="porsche">porsche</option>
-                            <option value="chevrolet">chevrolet</option>
-                            <option value="suzuki">suzuki</option>
-                            <option value="izh">izh</option>
-                            <option value="citroen">citroen</option>
-                            <option value="mini">mini</option>
-                            <option value="jeep">jeep</option>
-                            <option value="lifan">lifan</option>
-                            <option value="ssangyong">ssangyong</option>
-                            <option value="haval">haval</option>
-                            <option value="seat">seat</option>
-                            <option value="geely">geely</option>
-                            <option value="fiat">fiat</option>
-                            <option value="dodge">dodge</option>
-                            <option value="uaz">uaz</option>
-                            <option value="chrysler">chrysler</option>
-                            <option value="datsun">datsun</option>
-                            <option value="pontiac">pontiac</option>
-                            <option value="bentley">bentley</option>
-                            <option value="dongfeng">dongfeng</option>
-                            <option value="saab">saab</option>
-                            <option value="alfa-romeo">alfa-romeo</option>
-                            <option value="maserati">maserati</option>
-                            <option value="smart">smart</option>
-                            <option value="great-wall">great-wall</option>
-                            <option value="hafei">hafei</option>
-                            <option value="gaz">gaz</option>
-                            <option value="daewoo">daewoo</option>
-                            <option value="ravon">ravon</option>
-                        </select>
+                          {{ form.brand() }}
                         </div>
                       </div>
                 </div>
@@ -93,15 +38,7 @@
                     <div class="card" style="border-radius: 2.15rem; opacity: 0.7;">
                         <div class="card-body">
                           <h5 class="card-title">Carcase</h5>
-                          <select name="Carcase" id="Carcase" required="required">
-                            <option value="SUV">SUV</option>
-                            <option value="Sedan">Sedan</option>
-                            <option value="Hatchback">Hatchback</option>
-                            <option value="Liftback">Liftback</option>
-                            <option value="Station_wagon">Station wagon</option>
-                            <option value="Minivan">Minivan</option>
-                            <option value="Other">Other</option>
-                        </select>
+                          {{ form.carcase() }}
                         </div>
                       </div>
                 </div>
@@ -112,7 +49,7 @@
                     <div class="card" style="border-radius: 2.15rem; opacity: 0.7;">
                         <div class="card-body">
                           <h5 class="card-title">Year of manufacture</h5>
-                          <input type="number" id="year" name="year" min="1990" max="2022">
+                          {{ form.year() }}
                         </div>
                       </div>
                 </div>
@@ -121,7 +58,7 @@
                     <div class="card" style="border-radius: 2.15rem; opacity: 0.7;">
                         <div class="card-body">
                           <h5 class="card-title">Engine capacity</h5>
-                          <input type="number" id="Capacity" name="Capacity" min="60" max="680">
+                          {{ form.engine_capacity() }}
                         </div>
                       </div>
                 </div>
@@ -132,11 +69,7 @@
                     <div class="card" style="border-radius: 2.15rem; opacity: 0.7;">
                         <div class="card-body">
                             <h5 class="card-title">Drive unit</h5>
-                            <select name="auto_drive_unit" id="auto_drive_unit" required="required">
-                                <option value="four-wheel-drive">Four-wheel drive</option>
-                                <option value="front-wheel-drive">Front-wheel drive</option>
-                                <option value="Rear-wheel-drive">Rear-wheel-drive</option>
-                            </select>
+                            {{ form.drive_unit() }}
                         </div>
                     </div>
                 </div>
@@ -145,12 +78,7 @@
                     <div class="card" style="border-radius: 2.15rem; opacity: 0.7;">
                         <div class="card-body">
                           <h5 class="card-title">Transmission</h5>
-                          <select name="Transmission" id="Transmission" required="required">
-                            <option value="Manual">Manual</option>
-                            <option value="Automatic">Automatic</option>
-                            <option value="CVT">CVT</option>
-                            <option value="Robotic">Robotic</option>
-                        </select>
+                          {{ form.transmission() }}
                         </div>
                       </div>
                 </div>
@@ -161,22 +89,17 @@
                     <div class="card" style="border-radius: 2.15rem; opacity: 0.7;">
                         <div class="card-body">
                           <h5 class="card-title">End of guarantee</h5>
-                          <input type="number" id="guarantee" name="guarantee" min="2022" max="2030">
+                          {{ form.guarantee() }}
                         </div>
                       </div>
                 </div>
             </div>
 
             <div style='text-align:center'>
-                <button type="submit" value='Submit' class="btn btn-primary px-5" style="font-size: 25px;">Submit</button>
+              {{ form.submit(style ='font-size: 25px', class="btn btn-primary px-5") }}
             </div>
         
         </form>
-
-        <h1 style='text-align: center;color: white; font-size: small;'><b>*Prediction of estimated car price is made based on sample data collected before 24/02/2022.
-        </b></h1>
-        <h1 style='text-align: center;color: white; font-size: small;'><b>After 24/02/2022 car prices rised due to supply reduction and increase in production cost. 
-        </b></h1>
 
         <h1 style='text-align: center;color: white;'><b>{% block content %} {{prediction|safe}} {% endblock %}</b></h1>
 

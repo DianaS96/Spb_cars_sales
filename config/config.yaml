@@ -1,0 +1,19 @@
+database:
+  DIR: C:\Users\User\Desktop\Programming\Spb_cars_sales\data\
+  TXT_FILE: auto_urls_list.txt
+  CSV_FILE: auto_data.csv
+  DB_NAME: test.db
+  create_db: True
+  update_csv: False
+  update_auto_urls: False
+
+train:
+  test_size: 0.2
+  random_state: 42
+  max_depth: 10
+  n_estimators: 70
+  learning_rate: 0.2
+  model_name: lgbm_model.pkl
+
+app:
+  get_prediction_model: True
